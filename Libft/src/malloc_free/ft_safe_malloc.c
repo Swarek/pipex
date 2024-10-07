@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:03:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/09/22 17:25:07 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/08 01:03:19 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,18 @@ void	*ft_safe_malloc(size_t size)
 	}
 	ft_memset(ptr, 0, size);
 	return (ptr);
+}
+
+void	*safe_malloc(size_t size, void **ptr)
+{
+	if (!ptr)
+		return (NULL);
+	*ptr = malloc(size);
+	if (!(*ptr))
+	{
+		ft_error_msg("Memory allocation failed\n");
+		return (NULL);
+	}
+	ft_memset(*ptr, 0, size);
+	return (*ptr);
 }

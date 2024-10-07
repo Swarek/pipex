@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 18:02:21 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/06 05:54:46 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/07 18:28:57 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@
 
 typedef struct s_pipex
 {
+	int		**pipes;
+	int		cmd_count;
 	int		infile;
 	int		outfile;
 	char	**envp;
@@ -40,5 +42,6 @@ typedef struct s_pipex
 
 void	execute(char *argv, char **envp);
 void	process_pipe(t_pipex *pipex, char *cmd1, char *cmd2);
-
+pid_t	forking(t_pipex *pipex, char *cmd, int fd_in, int fd_out);
+int		opening_files(t_pipex *pipex, char **argv, int argc);
 #endif

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipes_gestion.c                                    :+:      :+:    :+:   */
+/*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 00:19:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/07 02:52:05 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/07 18:29:25 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,3 +54,38 @@ void	process_pipe(t_pipex *pipex, char *cmd1, char *cmd2)
 	waitpid(pid1, NULL, 0);
 	waitpid(pid2, NULL, 0);
 }
+
+int	opening_files(t_pipex *pipex, char **argv, int argc)
+{
+	pipex->infile = open(argv[1], O_RDONLY);
+	if (pipex->infile < 0)
+		return (ft_error_msg("Failed to open infile\n"));
+	pipex->outfile = open(argv[argc - 1], O_WRONLY);
+	if (pipex->outfile < 0)
+		return (ft_error_msg("Failed to open outfile\n"));
+}
+
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	t_pipex	pipex;
+// 	int		i;
+
+// 	if (argc != 5 || envp == NULL)
+// 	{
+// 		ft_error_msg("Usage: ./pipex infile \"cmd1\" \"cmd2\" outfile\n");
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	if (opening_files(&pipex, argv, argc) == -1)
+// 		exit(ft_error_msg("Failed to open files\n"));
+// 	pipex.envp = envp;
+// 	process_pipe(&pipex, argv[2], argv[3]);
+// 	close(pipex.infile);
+// 	close(pipex.outfile);
+// 	i = -1;
+// 	while (i++ < pipex.cmd_count)
+// 	{
+// 		free(pipex.pipes[i]);
+// 		free(pipex.pipes);
+// 	}
+// 	return (0);
+// }

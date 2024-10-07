@@ -4,7 +4,7 @@ SRC_DIR = src
 OBJ_DIR = obj
 INC_DIR = includes
 
-SOURCES := $(wildcard $(SRC_DIR)/**/*.c) main.c
+SOURCES := $(wildcard $(SRC_DIR)/**/*.c)
 OBJECTS = $(SOURCES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 OBJECTS := $(OBJECTS:main.c=$(OBJ_DIR)/main.o)
 
