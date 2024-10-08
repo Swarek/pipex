@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 18:02:21 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/07 18:28:57 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/08 05:12:30 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,11 @@ void	execute(char *argv, char **envp);
 void	process_pipe(t_pipex *pipex, char *cmd1, char *cmd2);
 pid_t	forking(t_pipex *pipex, char *cmd, int fd_in, int fd_out);
 int		opening_files(t_pipex *pipex, char **argv, int argc);
+void	wait_and_cleanup(t_pipex *pipex, pid_t *child_pids);
+void	init_pipes_fork_process(t_pipex *pipex, char **argv, pid_t **child);
+void	fork_and_execute_processes(t_pipex *pipex, char **argv, pid_t *child);
+void	execute_child_process(t_pipex *pipex, char **argv, int i);
+int		setup_redirection(t_pipex *pipex, int i);
+void	here_doc_management(char *limiter);
+
 #endif

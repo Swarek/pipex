@@ -1,41 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_safe_malloc.c                                   :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/04 13:03:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/08 01:54:52 by mblanc           ###   ########.fr       */
+/*   Created: 2024/10/08 05:10:21 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/08 05:10:49 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*safe_malloc_exit(size_t size)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	void	*ptr;
-
-	ptr = malloc(size);
-	if (!ptr)
+	while (*s1 && (*s1 == *s2))
 	{
-		write(2, "Memory allocation failed\n", 25);
-		exit(EXIT_FAILURE);
+		s1++;
+		s2++;
 	}
-	ft_memset(ptr, 0, size);
-	return (ptr);
-}
-
-void	*safe_malloc_null(size_t size, void **ptr)
-{
-	if (!ptr)
-		return (NULL);
-	*ptr = malloc(size);
-	if (!(*ptr))
-	{
-		ft_error_msg("Memory allocation failed\n");
-		return (NULL);
-	}
-	ft_memset(*ptr, 0, size);
-	return (*ptr);
+	return (*(unsigned char *)s1 - *(unsigned char *)s2);
 }

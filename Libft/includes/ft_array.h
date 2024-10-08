@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:12:33 by mblanc            #+#    #+#             */
-/*   Updated: 2024/09/04 13:18:33 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/08 05:10:11 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,6 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 char	*ft_strrchr(const char *s, int c);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_substr(const char *s, unsigned int start, size_t len);
+int		ft_strcmp(const char *s1, const char *s2);
 
 #endif
