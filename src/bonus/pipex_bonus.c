@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 04:42:30 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/09 07:30:36 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/09 14:16:14 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,39 +69,34 @@ int	setup_redirection(t_pipex *pipex, int i)
  *
  * The function does not return; it exits the process upon completion or error.
  */
-int execute_child_process(t_pipex *pipex, char **argv, int i)
+int	execute_child_process(t_pipex *pipex, char **argv, int i)
 {
-    if (setup_redirection(pipex, i) == -1)
-    {
-        ft_error_msg("Redirection failed\n");
-        cleanup_child(pipex, NULL);
-        exit(EXIT_FAILURE);
-    }
+	int	j;
 
-    // Fermer les descripteurs de pipes inutilisés
-    for (int j = 0; j < pipex->cmd_count - 1; j++)
-    {
-        close(pipex->pipes[j][0]);
-        close(pipex->pipes[j][1]);
-    }
-
-    // Fermer infile et outfile
-    if (pipex->infile != -1)
-        close(pipex->infile);
-    if (pipex->outfile != -1)
-        close(pipex->outfile);
-
-    // Exécuter la commande
-    if (execute(argv[2 + i], pipex->envp) == -1)
-    {
-        cleanup_child(pipex, NULL);
-        exit(EXIT_FAILURE);
-    }
-
-    // Le processus enfant ne devrait pas atteindre ce point
-    return (0);
+	if (setup_redirection(pipex, i) == -1)
+	{
+		ft_error_msg("Redirection failed\n");
+		cleanup_child(pipex, NULL);
+		exit(EXIT_FAILURE);
+	}
+	j = 0;
+	while (j < pipex->cmd_count - 1)
+	{
+		close(pipex->pipes[j][0]);
+		close(pipex->pipes[j][1]);
+		j++;
+	}
+	if (pipex->infile != -1)
+		close(pipex->infile);
+	if (pipex->outfile != -1)
+		close(pipex->outfile);
+	if (execute(argv[2 + i], pipex->envp) == -1)
+	{
+		cleanup_child(pipex, NULL);
+		exit(EXIT_FAILURE);
+	}
+	return (0);
 }
-
 
 /**
  * Forks child processes for each command in the pipeline

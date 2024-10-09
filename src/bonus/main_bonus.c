@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 02:51:42 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/09 07:30:26 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/09 14:15:17 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,40 +66,40 @@ void	handle_here_doc(int *argc, char **argv)
 	(*argc)--;
 }
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-    t_pipex pipex;
-    pid_t *child_pids = NULL;  // Initialisé à NULL
-    int here_doc = 0;
+	t_pipex	pipex;
+	pid_t	*child_pids;
+	int		here_doc;
 
-    // Initialise les champs du pipex
-    pipex.infile = -1;
-    pipex.outfile = -1;
-    pipex.pipes = NULL;
-    pipex.cmd_count = 0;
+	here_doc = 0;
+	child_pids = NULL;
+	pipex.infile = -1;
+	pipex.outfile = -1;
+	pipex.pipes = NULL;
+	pipex.cmd_count = 0;
 	pipex.child_pids = NULL;
-
-    if (argc < 5 || envp == NULL)
-    {
-        ft_error_msg("Usage: ./pipex infile \"cmd1\" \"cmd2\" ... \"cmdn\" outfile\n");
-        exit(EXIT_FAILURE);
-    }
-    if (ft_strcmp(argv[1], "here_doc") == 0)
-        handle_here_doc(&argc, argv);
-    if (opening_files(&pipex, argv, argc) == -1)
-    {
-        cleanup_parent(&pipex);
-        exit(EXIT_FAILURE);
-    }
-    pipex.envp = envp;
-    pipex.cmd_count = argc - 3;
-    if (init_pipes_fork_process(&pipex, argv, &child_pids) == -1)
-    {
-        cleanup_parent(&pipex);
-        exit(EXIT_FAILURE);
-    }
-    wait_and_cleanup(&pipex, child_pids);
-    close(pipex.infile);
-    close(pipex.outfile);
-    return (0);
+	if (argc < 5 || envp == NULL)
+	{
+		ft_error_msg("Usage: ./pipex infile \"cmd1\" \"cmd2\" ... \"cmdn\" outfile\n");
+		exit(EXIT_FAILURE);
+	}
+	if (ft_strcmp(argv[1], "here_doc") == 0)
+		handle_here_doc(&argc, argv);
+	if (opening_files(&pipex, argv, argc) == -1)
+	{
+		cleanup_parent(&pipex);
+		exit(EXIT_FAILURE);
+	}
+	pipex.envp = envp;
+	pipex.cmd_count = argc - 3;
+	if (init_pipes_fork_process(&pipex, argv, &child_pids) == -1)
+	{
+		cleanup_parent(&pipex);
+		exit(EXIT_FAILURE);
+	}
+	wait_and_cleanup(&pipex, child_pids);
+	close(pipex.infile);
+	close(pipex.outfile);
+	return (0);
 }
