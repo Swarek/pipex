@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 00:19:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/08 05:44:28 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/09 02:51:22 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,28 +64,3 @@ int	opening_files(t_pipex *pipex, char **argv, int argc)
 	if (pipex->outfile < 0)
 		return (ft_error_msg("Failed to open outfile\n"));
 }
-
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	t_pipex	pipex;
-// 	int		i;
-
-// 	if (argc != 5 || envp == NULL)
-// 	{
-// 		ft_error_msg("Usage: ./pipex infile \"cmd1\" \"cmd2\" outfile\n");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	if (opening_files(&pipex, argv, argc) == -1)
-// 		exit(ft_error_msg("Failed to open files\n"));
-// 	pipex.envp = envp;
-// 	process_pipe(&pipex, argv[2], argv[3]);
-// 	close(pipex.infile);
-// 	close(pipex.outfile);
-// 	i = -1;
-// 	while (i++ < pipex.cmd_count)
-// 	{
-// 		free(pipex.pipes[i]);
-// 		free(pipex.pipes);
-// 	}
-// 	return (0);
-// }

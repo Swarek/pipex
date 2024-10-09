@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/08 05:47:00 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/09 04:37:31 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,22 +53,30 @@ char	*find_command_path(char *command, char **envp)
 	return (NULL);
 }
 
-void	execute(char *argv, char **envp)
+int	execute(char *argv, char **envp)
 {
 	char	**cmd;
 	char	*path;
 
 	cmd = ft_split(argv, ' ');
+	if (!cmd || !cmd[0] || ft_strcmp(cmd[0], " ") == 0)
+	{
+		safe_free_all_strings(&cmd);
+		ft_error_msg("Empty command\n");
+		return (-1);
+	}
 	path = find_command_path(cmd[0], envp);
 	if (!path)
 	{
 		ft_error_msg("Command not found\n");
 		safe_free_all_strings(&cmd);
-		exit(EXIT_FAILURE);
+		return (-1);
 	}
 	if (execve(path, cmd, envp) == -1)
 	{
-		ft_error_msg("Command not found\n");
-		exit(EXIT_FAILURE);
+		ft_error_msg("Command execution failed\n");
+		safe_free_all_strings(&cmd);
+		return (-1);
 	}
+	return (0);
 }

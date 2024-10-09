@@ -6,13 +6,11 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 04:54:57 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/08 05:32:36 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/09 06:59:28 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-#include <string.h>
 
 void	here_doc_management(char *limiter)
 {
@@ -28,7 +26,7 @@ void	here_doc_management(char *limiter)
 			break ;
 		if (line[ft_strlen(line) - 1] == '\n')
 			line[ft_strlen(line) - 1] = '\0';
-		if (strcmp(line, limiter) == 0)
+		if (ft_strcmp(line, limiter) == 0)
 		{
 			free(line);
 			break ;
