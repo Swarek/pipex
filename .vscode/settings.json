@@ -1,0 +1,28 @@
+{
+	"files.associations": {
+		"push_swap.h": "c",
+		"libft.h": "c",
+		"ft_malloc_free.h": "c",
+		"ft_structs.h": "c",
+		"ft_files.h": "c",
+		"stddef.h": "c",
+		"ft_printf.h": "c",
+		"ft_array_of_strings.h": "c",
+		"ft_array.h": "c",
+		"ft_conversions.h": "c",
+		"ft_error_handling.h": "c",
+		"ft_memory_management.h": "c",
+		"ft_printing.h": "c",
+		"ft_utils.h": "c",
+		"ft_linked_lists.h": "c",
+		"free_all_strings": "c",
+		"type_traits": "c",
+		"pushswap.h": "c",
+		"stdio.h": "c",
+		"algorithm": "c",
+		"testers.h": "c",
+		"random": "c",
+		"pipex.h": "c",
+		"fcntl.h": "c"
+	}
+}

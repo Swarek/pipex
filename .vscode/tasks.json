@@ -1,0 +1,17 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",  // Le nom de la tâche appelé par "preLaunchTask"
+            "type": "shell",
+            "command": "make",
+            "args": ["debug"],  // Utilise la cible "debug" pour compiler avec les symboles de débogage
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Tâche de build pour compiler le projet avec les options de debug"
+        }
+    ]
+}

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 00:19:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/09 02:51:22 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/11 00:15:06 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ int	opening_files(t_pipex *pipex, char **argv, int argc)
 	pipex->infile = open(argv[1], O_RDONLY);
 	if (pipex->infile < 0)
 		return (ft_error_msg("Failed to open infile\n"));
-	pipex->outfile = open(argv[argc - 1], O_WRONLY);
+	pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (pipex->outfile < 0)
 		return (ft_error_msg("Failed to open outfile\n"));
+	return (0);
 }
