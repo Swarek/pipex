@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 02:51:42 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/09 14:15:17 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/11 16:16:08 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int	main(int argc, char **argv, char **envp)
 	pid_t	*child_pids;
 	int		here_doc;
 
+	// ft_print_array(special_split("tr ' ' '_'", ' '));
 	here_doc = 0;
 	child_pids = NULL;
 	pipex.infile = -1;

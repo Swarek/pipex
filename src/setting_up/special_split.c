@@ -6,175 +6,89 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 13:16:07 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/11 00:08:10 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/12 15:57:09 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-// int	count_words(const char *str, char c)
-// {
-// 	int	count;
-
-// 	count = 0;
-// 	while (*str)
-// 	{
-// 		while (*str && *str == c)
-// 			str++;
-// 		if (*str && *str != c)
-// 		{
-// 			count++;
-// 			while (*str && *str != c)
-// 				str++;
-// 		}
-// 	}
-// 	return (count);
-// }
-
-// char	*malloc_word(const char *str, char c)
-// {
-// 	const char	*end;
-// 	char		*word;
-// 	int			i;
-
-// 	end = str;
-// 	while (*end && !*end != c)
-// 		end++;
-// 	word = malloc(end - str + 1);
-// 	if (!word)
-// 		return (NULL);
-// 	i = 0;
-// 	while (str < end)
-// 	{
-// 		word[i] = *str;
-// 		str++;
-// 		i++;
-// 	}
-// 	word[i] = '\0';
-// 	return (word);
-// }
-
-// char	**ft_split(char const *s, char c)
-// {
-// 	int		words;
-// 	char	**array;
-// 	int		i;
-
-// 	words = count_words(s, c);
-// 	array = malloc(sizeof(char *) * (words + 1));
-// 	if (!array || !s)
-// 		return (NULL);
-// 	i = 0;
-// 	while (i < words)
-// 	{
-// 		while (*s == c)
-// 			s++;
-// 		array[i] = malloc_word(s, c);
-// 		if (!array[i])
-// 		{
-// 			while (i-- > 0)
-// 				free(array[i]);
-// 			return (free(array), NULL);
-// 		}
-// 		while (*s && *s != c)
-// 			s++;
-// 		i++;
-// 	}
-// 	return (array[words] = NULL, array);
-// }
 
 char	*my_malloc_word(const char *s, int len)
 {
 	char	*word;
 
 	safe_malloc_null(sizeof(char) * (len + 1), (void **)&word);
-	if (!word)
+	if (word == NULL)
 		return (NULL);
 	ft_strlcpy(word, s, len + 1);
 	return (word);
 }
 
-int	is_between_quotes(const char *s, int pos)
+static char	**handle_memory_failure(char **array, int count)
 {
-	int	quote;
-	int	i;
-
-	quote = 0;
-	i = 0;
-	while (i < pos)
+	while (count > 0)
 	{
-		if (s[i] == '\'')
-		{
-			quote = !quote;
-		}
-		i++;
+		count--;
+		free(array[count]);
 	}
-	return (quote);
+	free(array);
+	return (NULL);
 }
 
-char	**special_split(const char *s, char c)
+static char	**add_word(char **array, const char *word_start, int len, int *c)
+{
+	char	**new_array;
+
+	new_array = ft_realloc(array, sizeof(char *) * (*c),
+			sizeof(char *) * (*c + 1));
+	if (new_array == NULL)
+		return (handle_memory_failure(array, *c));
+	array = new_array;
+	array[*c] = my_malloc_word(word_start, len);
+	if (array[*c] == NULL)
+		return (handle_memory_failure(array, *c));
+	(*c)++;
+	return (array);
+}
+
+static char	**process_split(const char *s, char delimiter, char **array, int *c)
 {
 	int		i;
 	int		start;
-	int		count;
-	char	**array;
-	char	**temp;
+	int		quote;
 
 	i = 0;
 	start = 0;
-	count = 0;
-	array = NULL;
-	if (!s)
-		return (NULL);
-	while (s[i])
+	quote = 0;
+	while (s[i] != '\0')
 	{
-		while (s[i] == c && !is_between_quotes(s, i))
+		while (s[i] == delimiter && quote == 0)
 			i++;
 		start = i;
-		while (s[i] != c && s[i] != '\0')
+		while (s[i] != '\0' && !is_delimiter(s[i], quote, delimiter))
 		{
 			if (s[i] == '\'')
-			{
-				i++;
-				while (s[i] != '\'' && s[i] != '\0')
-					i++;
-				if (s[i] == '\'')
-					i++;
-			}
-			else
-				i++;
+				quote = !quote;
+			i++;
 		}
-		if (i > start)
-		{
-			count++;
-			temp = ft_realloc(array, sizeof(char *) * (count - 1), sizeof(char *) * count);
-			if (!temp)
-			{
-				while (count-- > 1)
-					free(array[count - 1]);
-				free(array);
-				return (NULL);
-			}
-			array = temp;
-			array[count - 1] = my_malloc_word(&s[start], i - start);
-			if (!array[count - 1])
-			{
-				while (count-- > 1)
-					free(array[count - 1]);
-				free(array);
-				return (NULL);
-			}
-		}
+		array = add_word(array, s + start, i - start, c);
 	}
-	temp = ft_realloc(array, sizeof(char *) * count, sizeof(char *) * (count + 1));
-	if (!temp)
-	{
-		while (count-- > 0)
-			free(array[count]);
-		free(array);
+	return (array);
+}
+
+char	**special_split(const char *s, char delimiter)
+{
+	char	**array;
+	int		count;
+
+	count = 0;
+	array = NULL;
+	array = process_split(s, delimiter, array, &count);
+	if (array == NULL)
 		return (NULL);
-	}
-	array = temp;
+	array = ft_realloc(array, sizeof(char *)
+			* count, sizeof(char *) * (count + 1));
+	if (array == NULL)
+		return (handle_memory_failure(array, count));
 	array[count] = NULL;
 	return (array);
 }

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 18:02:21 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/11 00:03:36 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/12 15:56:39 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ int		execute_child_process(t_pipex *pipex, char **argv, int i);
 int		setup_redirection(t_pipex *pipex, int i);
 void	here_doc_management(char *limiter);
 char	**special_split(const char *s, char c);
-// Clean up functions
-void 	cleanup_parent(t_pipex *pipex);
+void	cleanup_parent(t_pipex *pipex);
 void	cleanup_child(t_pipex *pipex, char **cmd);
+int		is_delimiter(char c, int quote, char delimiter);
 
 #endif
