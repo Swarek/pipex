@@ -1,29 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_error_msg.c                                     :+:      :+:    :+:   */
+/*   close_both.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/04 12:32:54 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/12 23:39:25 by mblanc           ###   ########.fr       */
+/*   Created: 2024/10/12 21:45:05 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/12 21:46:45 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "pipex.h"
 
-int	ft_error_msg(const char *msg)
+void	close_both(int to_close1, int to_close2)
 {
-	if (msg)
-	{
-		write(2, BOLD_COLOR_RED, 8);
-		write(2, "Error\n", 6);
-		while (*msg)
-		{
-			write(2, msg, 1);
-			msg++;
-		}
-		write(2, RESET_COLOR, 4);
-	}
-	return (-1);
+	close(to_close1);
+	close(to_close2);
 }

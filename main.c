@@ -1,29 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_error_msg.c                                     :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/04 12:32:54 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/12 23:39:25 by mblanc           ###   ########.fr       */
+/*   Created: 2024/10/06 00:34:23 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/13 23:13:54 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "pipex.h"
 
-int	ft_error_msg(const char *msg)
+int	main(int argc, char **argv, char **envp)
 {
-	if (msg)
+	t_pipex	pipex;
+
+	if (argc != 5 || envp == NULL)
 	{
-		write(2, BOLD_COLOR_RED, 8);
-		write(2, "Error\n", 6);
-		while (*msg)
-		{
-			write(2, msg, 1);
-			msg++;
-		}
-		write(2, RESET_COLOR, 4);
+		ft_error_msg("Usage: ./pipex infile \"cmd1\" \"cmd2\" outfile\n");
+		exit(EXIT_FAILURE);
 	}
-	return (-1);
+	if (opening_files(&pipex, argv, argc) == -1)
+		exit(EXIT_FAILURE);
+	pipex.envp = envp;
+	process_pipe(&pipex, argv[2], argv[3]);
+	// close(pipex.infile);
+	// close(pipex.outfile);
+	return (0);
 }

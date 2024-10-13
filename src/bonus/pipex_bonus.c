@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 04:42:30 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/12 15:59:17 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/12 23:40:30 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ int	execute_child_process(t_pipex *pipex, char **argv, int i)
 	if (setup_redirection(pipex, i) == -1)
 	{
 		ft_error_msg("Redirection failed\n");
-		cleanup_child(pipex, NULL);
-		exit(EXIT_FAILURE);
+		cleanup_child(pipex, NULL, pipex->cmd_count - 1);
+		return (-1);
 	}
 	j = 0;
 	while (j < pipex->cmd_count - 1)
@@ -52,19 +52,17 @@ int	execute_child_process(t_pipex *pipex, char **argv, int i)
 		close(pipex->pipes[j][1]);
 		j++;
 	}
-	if (pipex->infile != -1)
-		close(pipex->infile);
-	if (pipex->outfile != -1)
-		close(pipex->outfile);
+	close(pipex->infile);
+	close(pipex->outfile);
 	if (execute(argv[2 + i], pipex->envp) == -1)
 	{
-		cleanup_child(pipex, NULL);
-		exit(EXIT_FAILURE);
+		cleanup_child(pipex, NULL, pipex->cmd_count - 1);
+		return (-1);
 	}
 	return (0);
 }
 
-void	fork_and_execute_processes(t_pipex *pipex, char **argv, pid_t *child)
+int	fork_and_execute_processes(t_pipex *pipex, char **argv, pid_t *child)
 {
 	int		i;
 	pid_t	pid;
@@ -74,7 +72,7 @@ void	fork_and_execute_processes(t_pipex *pipex, char **argv, pid_t *child)
 	{
 		pid = fork();
 		if (pid == -1)
-			exit(ft_error_msg("Fork failed"));
+			return (ft_error_msg("Fork failed\n"));
 		if (pid == 0)
 			execute_child_process(pipex, argv, i);
 		else
@@ -85,12 +83,10 @@ void	fork_and_execute_processes(t_pipex *pipex, char **argv, pid_t *child)
 			else if (i == pipex->cmd_count - 1)
 				close(pipex->pipes[i - 1][0]);
 			else
-			{
-				close(pipex->pipes[i - 1][0]);
-				close(pipex->pipes[i][1]);
-			}
+				close_both(pipex->pipes[i - 1][0], pipex->pipes[i][1]);
 		}
 	}
+	return (0);
 }
 
 int	init_pipes(t_pipex *pipex)
@@ -100,20 +96,22 @@ int	init_pipes(t_pipex *pipex)
 	safe_malloc_null(sizeof(int *) * (pipex->cmd_count - 1),
 		(void **)&pipex->pipes);
 	if (!pipex->pipes)
-		return (ft_error_msg("Memory allocation failed"));
+		return (ft_error_msg("Memory allocation failed\n"));
 	i = 0;
 	while (i < pipex->cmd_count - 1)
 	{
 		safe_malloc_null(sizeof(int) * 2, (void **)&pipex->pipes[i]);
 		if (!pipex->pipes[i])
 		{
+			cleanup_child(pipex, NULL, i);
 			cleanup_parent(pipex);
-			return (ft_error_msg("Memory allocation failed"));
+			return (ft_error_msg("Memory allocation failed\n"));
 		}
 		if (pipe(pipex->pipes[i]) == -1)
 		{
+			cleanup_child(pipex, NULL, i);
 			cleanup_parent(pipex);
-			return (ft_error_msg("Pipe creation failed"));
+			return (ft_error_msg("Pipe creation failed\n"));
 		}
 		i++;
 	}
@@ -124,7 +122,7 @@ int	init_pipes_fork_process(t_pipex *pipex, char **argv, pid_t **child)
 {
 	safe_malloc_null(sizeof(pid_t) * pipex->cmd_count, (void **)child);
 	if (!*child)
-		return (ft_error_msg("Memory allocation failed"));
+		return (ft_error_msg("Memory allocation failed\n"));
 	pipex->child_pids = *child;
 	if (init_pipes(pipex) == -1)
 		return (-1);
