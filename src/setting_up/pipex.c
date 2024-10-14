@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 00:19:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/14 00:13:51 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/14 17:15:20 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,8 @@ pid_t	fork_and_execute(t_pipex *pipex, char *cmd, int fd_in, int fd_out)
 			close(pipex->outfile);
 		close(pipex->fd[0]);
 		close(pipex->fd[1]);
-		execute(cmd, pipex->envp);
 		if (execute(cmd, pipex->envp) == -1)
-			exit(EXIT_FAILURE);
+			return (exit(EXIT_FAILURE), -1);
 		exit(EXIT_SUCCESS);
 	}
 	return (pid);
@@ -52,10 +51,10 @@ void	process_pipe(t_pipex *pipex, char *cmd1, char *cmd2)
 		exit(EXIT_FAILURE);
 	}
 	pid1 = fork_and_execute(pipex, cmd1, pipex->infile, pipex->fd[1]);
-	pid2 = fork_and_execute(pipex, cmd2, pipex->fd[0], pipex->outfile);
 	close(pipex->fd[1]);
-	close(pipex->fd[0]);
 	waitpid(pid1, NULL, 0);
+	pid2 = fork_and_execute(pipex, cmd2, pipex->fd[0], pipex->outfile);
+	close(pipex->fd[0]);
 	waitpid(pid2, NULL, 0);
 }
 
