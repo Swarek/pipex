@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:43:10 by mblanc            #+#    #+#             */
-/*   Updated: 2024/09/04 14:32:36 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/14 01:55:12 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,20 +71,20 @@ char	*my_strjoin(char *s1, char *s2)
 	return (result);
 }
 
-char	*ft_strchr(const char *str, int c)
-{
-	if (!str)
-		return (NULL);
-	while (*str != '\0')
-	{
-		if (*str == (char)c)
-			return ((char *)str);
-		str++;
-	}
-	if ((char)c == '\0')
-		return ((char *)str);
-	return (NULL);
-}
+// static char	*ft_strchr(const char *str, int c)
+// {
+// 	if (!str)
+// 		return (NULL);
+// 	while (*str != '\0')
+// 	{
+// 		if (*str == (char)c)
+// 			return ((char *)str);
+// 		str++;
+// 	}
+// 	if ((char)c == '\0')
+// 		return ((char *)str);
+// 	return (NULL);
+// }
 
 char	*ft_strdup(const char *s)
 {

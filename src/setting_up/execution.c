@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   find_command_path.c                                :+:      :+:    :+:   */
+/*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/11 00:13:19 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/14 02:10:11 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,13 @@ char	*find_command_path(char *command, char **envp)
 	return (NULL);
 }
 
-// Erreur : ./pipex infile cat "tr ' ' '_'" outfile
-// L'espace ' ' est prit en compte dans le split 
 int	execute(char *argv, char **envp)
 {
 	char	**cmd;
 	char	*path;
 
 	cmd = special_split(argv, ' ');
+	cmd = remove_quotes(cmd);
 	if (!cmd || !cmd[0] || ft_strcmp(cmd[0], " ") == 0)
 	{
 		safe_free_all_strings(&cmd);

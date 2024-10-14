@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 00:34:23 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/13 23:13:54 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/14 00:08:51 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	main(int argc, char **argv, char **envp)
 		exit(EXIT_FAILURE);
 	pipex.envp = envp;
 	process_pipe(&pipex, argv[2], argv[3]);
-	// close(pipex.infile);
-	// close(pipex.outfile);
+	close(pipex.infile);
+	close(pipex.outfile);
 	return (0);
 }

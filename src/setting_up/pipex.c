@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 00:19:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/13 23:24:04 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/14 00:13:51 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,17 @@ pid_t	fork_and_execute(t_pipex *pipex, char *cmd, int fd_in, int fd_out)
 	{
 		dup2(fd_in, STDIN_FILENO);
 		dup2(fd_out, STDOUT_FILENO);
-		close(fd_in);
-		close(fd_out);
+		close_both(fd_in, fd_out);
+		if (pipex->infile != fd_in)
+			close(pipex->infile);
+		if (pipex->outfile != fd_out)
+			close(pipex->outfile);
 		close(pipex->fd[0]);
 		close(pipex->fd[1]);
 		execute(cmd, pipex->envp);
-		ft_error_msg("execve failed\n");
-		exit(EXIT_FAILURE);
-	}
-	else
-	{
-		ft_printf("fd_in: %d, fd_out : %d\n", fd_in, fd_out);
-		close(fd_in);
-		close(fd_out);
+		if (execute(cmd, pipex->envp) == -1)
+			exit(EXIT_FAILURE);
+		exit(EXIT_SUCCESS);
 	}
 	return (pid);
 }

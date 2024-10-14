@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 18:02:21 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/12 21:47:56 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/14 02:09:32 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,6 @@ void	cleanup_parent(t_pipex *pipex);
 void	cleanup_child(t_pipex *pipex, char **cmd, int max_pipes);
 int		is_delimiter(char c, int quote, char delimiter);
 void	close_both(int to_close1, int to_close2);
+char	**remove_quotes(char **cmd);
 
 #endif
