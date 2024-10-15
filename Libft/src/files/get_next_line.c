@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:41:32 by mblanc            #+#    #+#             */
-/*   Updated: 2024/09/04 14:31:09 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/14 18:27:56 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,24 @@ char	*taking_the_buff(int fd, char data[BUFFER_SIZE], char *output)
 	while (bytes_read != 0)
 	{
 		buffer = ftt_calloc(BUFFER_SIZE + 1, sizeof(char));
+		if (!buffer)
+			return (free(output), NULL);
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read < 0)
 		{
 			bytes_read = 0;
 			while (bytes_read < BUFFER_SIZE)
 				data[bytes_read++] = 0;
-			return (free(buffer), NULL);
+			free(buffer);
+			return (free(output), NULL);
 		}
+		buffer[bytes_read] = '\0';
 		temp = output;
 		output = my_strjoin(output, buffer);
 		free(temp);
 		free(buffer);
+		if (!output)
+			return (NULL);
 		bytes_read = set_data(data, output, bytes_read);
 	}
 	return (output);
@@ -45,16 +51,21 @@ int	set_data(char data[BUFFER_SIZE], char *output, int bytes_read)
 	int		j;
 	char	*memo;
 
+	if (!output)
+		return (bytes_read);
 	memo = ft_strchr(output, '\n');
 	if (memo == NULL)
 		return (bytes_read);
 	i = 0;
 	j = 1;
-	while (memo[j] != '\0')
+	while (memo[j] != '\0' && i < BUFFER_SIZE)
 		data[i++] = memo[j++];
-	i = 1;
-	while (memo[i])
-		memo[i++] = '\0';
+	if (i < BUFFER_SIZE)
+	{
+		i = 1;
+		while (memo[i] && i < BUFFER_SIZE)
+			memo[i++] = '\0';
+	}
 	return (0);
 }
 
@@ -92,14 +103,21 @@ char	*verif_data(char data[BUFFER_SIZE], int fd)
 		if (memo)
 			return (data_with_nl(data, memo));
 		output = ftt_calloc(BUFFER_SIZE + 1, sizeof(char));
+		if (!output)
+			return (NULL);
 		while (data[++i])
 			output[i] = data[i];
+		output[i] = '\0';
 		i = 0;
 		while (i < BUFFER_SIZE)
 			data[i++] = 0;
 	}
 	if (data[0] == 0)
+	{
 		output = taking_the_buff(fd, data, output);
+		if (!output)
+			return (NULL);
+	}
 	return (output);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 02:51:42 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/13 00:36:26 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/14 17:26:01 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	main(int argc, char **argv, char **envp)
 	if (argc < 5 || envp == NULL)
 		return (ft_error_msg
 			("Usage: ./pipex infile \"cmd1\" \"cmd2\"... \"cmdn\" outfile\n"));
-	if (ft_strcmp(argv[1], "here_doc") == 0)
+	if (ft_strcmp(argv[1], "here_doc") == 0 && argc > 5)
 		handle_here_doc(&argc, argv);
 	if (opening_files(&pipex, argv, argc) == -1)
 		return (cleanup_parent(&pipex), -1);

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:43:10 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/14 01:55:12 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/14 18:25:56 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,6 @@ char	*ft_strdup(const char *s)
 	temp = s;
 	len = 0;
 	i = 0;
-	if (s[0] == '\0')
-		return (NULL);
 	while (*temp++)
 		len++;
 	dup = (char *)malloc(len + 1);
