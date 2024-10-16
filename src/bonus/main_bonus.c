@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 02:51:42 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/16 06:43:21 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 09:07:54 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	pipex;
 
-	if (argc < 5 || envp == NULL)
+	if (argc < 5 || envp == NULL
+		|| (ft_strcmp(argv[1], "here_doc") == 0 && argc < 6))
 		return (ft_error_msg("Not enought arguments or envp problem\n"), -1);
 	if (ft_strcmp(argv[1], "here_doc") == 0 && argc > 5)
 		if (handle_here_doc(&argc, argv) == -1)

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 15:55:50 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/14 02:08:57 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 09:07:04 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,6 @@ char	**remove_quotes(char **cmd)
 			return (NULL);
 		len = ft_strlen(cmd[i]);
 		j = 0;
-		while (cmd[i][j])
-		{
-			if (cmd[i][j] == '\'')
-				ft_memmove(&cmd[i][j], &cmd[i][j + 1], len - j);
-			else
-				j++;
-		}
 		i++;
 	}
 	return (cmd);
