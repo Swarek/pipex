@@ -6,11 +6,22 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 04:54:57 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/16 06:49:16 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 18:09:36 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+static int	write_to_temp(int fd, char *line)
+{
+	if (write(fd, line, ft_strlen(line)) == -1)
+		return (ft_error_msg("Problem writing to temp.txt"),
+			free(line), close(fd), -1);
+	if (write(fd, "\n", 1) == -1)
+		return (ft_error_msg("Problem writing newline to temp.txt"),
+			free(line), close(fd), -1);
+	return (0);
+}
 
 int	handle_here_doc(int *argc, char **argv)
 {
@@ -28,17 +39,6 @@ int	handle_here_doc(int *argc, char **argv)
 	argv[i] = NULL;
 	(*argc)--;
 	return (return_value);
-}
-
-int	write_to_temp(int fd, char *line)
-{
-	if (write(fd, line, ft_strlen(line)) == -1)
-		return (ft_error_msg("Problem writing to temp.txt"),
-			free(line), close(fd), -1);
-	if (write(fd, "\n", 1) == -1)
-		return (ft_error_msg("Problem writing newline to temp.txt"),
-			free(line), close(fd), -1);
-	return (0);
 }
 
 int	here_doc_management(char *limiter)

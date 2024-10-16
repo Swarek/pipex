@@ -6,20 +6,13 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 15:55:50 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/16 09:07:04 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 18:14:30 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	is_delimiter(char c, int quote, char delimiter)
-{
-	if (quote)
-		return (0);
-	return (c == delimiter);
-}
-
-char	*remove_outer_quotes(char *str)
+static char	*remove_outer_quotes(char *str)
 {
 	int		len;
 	char	*tmp;

@@ -6,13 +6,13 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/16 18:04:41 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 18:12:42 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	*verify_a_path(char *path, char *command)
+static char	*verify_a_path(char *path, char *command)
 {
 	char	*command_path;
 	char	*temp;
@@ -38,7 +38,7 @@ char	*verify_a_path(char *path, char *command)
 	return (NULL);
 }
 
-char	*find_command_path(char *command, char **envp)
+static char	*find_command_path(char *command, char **envp)
 {
 	int		i;
 	char	**paths;
@@ -67,7 +67,7 @@ char	*find_command_path(char *command, char **envp)
 	return (NULL);
 }
 
-int	are_strings_white_spaces(char **cmd)
+static int	are_strings_white_spaces(char **cmd)
 {
 	int	i;
 	int	j;
@@ -87,7 +87,7 @@ int	are_strings_white_spaces(char **cmd)
 	return (1);
 }
 
-char	*prepare_and_find_path(char *argv, char ***cmd, char **envp)
+static char	*prepare_and_find_path(char *argv, char ***cmd, char **envp)
 {
 	char	*path;
 

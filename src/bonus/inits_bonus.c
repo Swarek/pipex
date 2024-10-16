@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 03:06:09 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/16 17:53:35 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 18:11:20 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	init_cmds(t_pipex *pipex, char **av)
 	return (0);
 }
 
-int	initialize_pipex_structure(t_pipex *pipex, char **env, int ac, char **av)
+int	init_pipex_structure(t_pipex *pipex, char **env, int ac, char **av)
 {
 	pipex->cmds = malloc(sizeof(char *) * (ac - 3));
 	if (!pipex->cmds)
@@ -79,7 +79,7 @@ int	initialize_pipex_structure(t_pipex *pipex, char **env, int ac, char **av)
 
 int	all_init(t_pipex *pipex, char **env, int ac, char **av)
 {
-	if (initialize_pipex_structure(pipex, env, ac, av) == -1)
+	if (init_pipex_structure(pipex, env, ac, av) == -1)
 		return (-1);
 	if (init_pipes(pipex) == -1)
 		return (-1);

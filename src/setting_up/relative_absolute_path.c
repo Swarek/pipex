@@ -6,13 +6,13 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:11:50 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/16 11:17:15 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 18:13:02 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	**build_new_cmd(char *path, char **cmd, int cmd_count)
+static char	**build_new_cmd(char *path, char **cmd, int cmd_count)
 {
 	char	**new_cmd;
 	int		j;

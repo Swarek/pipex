@@ -4,7 +4,6 @@ infile
 Libft
 main.c
 Makefile
-obj
 obj_bonus
 outfile
 pipex_bonus
