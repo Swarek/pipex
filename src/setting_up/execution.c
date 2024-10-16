@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/16 05:52:26 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 10:41:59 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,13 @@ char	*verify_a_path(char *path, char *command)
 	return (NULL);
 }
 
+int	is_absolute_or_relative_path(char *command)
+{
+	if (!command)
+		return (0);
+	return (command[0] == '/' || (command[0] == '.' && command[1] == '/') || (command[0] == '.' && command[1] == '.' && command[2] == '/'));
+}
+
 char	*find_command_path(char *command, char **envp)
 {
 	int		i;
@@ -36,6 +43,13 @@ char	*find_command_path(char *command, char **envp)
 
 	if (!command || *command == '\0' || ft_str_is_whitespace(command))
 		return (NULL);
+	if (is_absolute_or_relative_path(command))
+	{
+		if (access(command, X_OK) == 0)
+			return (ft_strdup(command));
+		else
+			return (NULL);
+	}
 	i = 0;
 	while (envp[i] != NULL && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
@@ -54,6 +68,7 @@ char	*find_command_path(char *command, char **envp)
 	safe_free_all_strings(&paths);
 	return (NULL);
 }
+
 
 int	are_strings_white_spaces(char **cmd)
 {
@@ -115,12 +130,20 @@ int	execute(char *argv, char **envp)
 		return (-1);
 	}
 	path = find_command_path(cmd[0], envp);
+	if (!path)
+	{
+		ft_error_msg("Command not found\n");
+		safe_free_all_strings(&cmd);
+		return (-1);
+	}
 	if (execve(path, cmd, envp) == -1)
 	{
+		free(path);
 		ft_error_msg("Command execution failed\n");
 		safe_free_all_strings(&cmd);
 		return (-1);
 	}
+	free(path);
 	return (0);
 }
 

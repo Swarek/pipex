@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:43:10 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/16 06:53:03 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 10:30:43 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,32 +85,6 @@ char	*my_strjoin(char *s1, char *s2)
 // 		return ((char *)str);
 // 	return (NULL);
 // }
-
-char	*ft_strdup(const char *s)
-{
-	const char	*temp;
-	char		*dup;
-	size_t		len;
-	size_t		i;
-
-	if (!s)
-		return (NULL);
-	temp = s;
-	len = 0;
-	i = 0;
-	while (*temp++)
-		len++;
-	dup = (char *)malloc(len + 1);
-	if (dup == NULL)
-		return (NULL);
-	while (i < len)
-	{
-		dup[i] = s[i];
-		i++;
-	}
-	dup[i] = '\0';
-	return (dup);
-}
 
 char	*process_data(char data[BUFFER_SIZE])
 {
