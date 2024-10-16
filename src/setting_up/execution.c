@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/16 10:41:59 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 11:16:17 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,20 @@
 char	*verify_a_path(char *path, char *command)
 {
 	char	*command_path;
+	char	*temp;
 
 	if (!path)
 		return (NULL);
-	command_path = ft_strjoin(path, command);
+	if (path[ft_strlen(path) - 1] != '/')
+	{
+		temp = ft_strjoin(path, "/");
+		if (!temp)
+			return (free(path), NULL);
+		command_path = ft_strjoin(temp, command);
+		free(temp);
+	}
+	else
+		command_path = ft_strjoin(path, command);
 	if (command_path == NULL)
 		return (free(path), NULL);
 	free(path);
@@ -26,13 +36,6 @@ char	*verify_a_path(char *path, char *command)
 		return (command_path);
 	free(command_path);
 	return (NULL);
-}
-
-int	is_absolute_or_relative_path(char *command)
-{
-	if (!command)
-		return (0);
-	return (command[0] == '/' || (command[0] == '.' && command[1] == '/') || (command[0] == '.' && command[1] == '.' && command[2] == '/'));
 }
 
 char	*find_command_path(char *command, char **envp)
@@ -44,12 +47,7 @@ char	*find_command_path(char *command, char **envp)
 	if (!command || *command == '\0' || ft_str_is_whitespace(command))
 		return (NULL);
 	if (is_absolute_or_relative_path(command))
-	{
-		if (access(command, X_OK) == 0)
-			return (ft_strdup(command));
-		else
-			return (NULL);
-	}
+		return (handle_absolute_or_relative_path(command));
 	i = 0;
 	while (envp[i] != NULL && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
@@ -61,14 +59,13 @@ char	*find_command_path(char *command, char **envp)
 	i = -1;
 	while (paths[++i])
 	{
-		command_path = verify_a_path(ft_strjoin(paths[i], "/"), command);
+		command_path = verify_a_path(ft_strdup(paths[i]), command);
 		if (command_path)
 			return (safe_free_all_strings(&paths), command_path);
 	}
 	safe_free_all_strings(&paths);
 	return (NULL);
 }
-
 
 int	are_strings_white_spaces(char **cmd)
 {
@@ -111,33 +108,52 @@ char	*cmd_name(char *cmd)
 	return (name);
 }
 
+char	*prepare_and_find_path(char *argv, char ***cmd, char **envp)
+{
+	char	*path;
+
+	*cmd = special_split(argv, ' ');
+	if (!(*cmd) || are_strings_white_spaces(*cmd) == 1)
+	{
+		ft_error_msg("Command split failed\n");
+		return (NULL);
+	}
+	*cmd = remove_quotes(*cmd);
+	if (!(*cmd) || !(*cmd)[0] || ft_strcmp((*cmd)[0], " ") == 0)
+	{
+		safe_free_all_strings(cmd);
+		ft_error_msg("Empty command\n");
+		return (NULL);
+	}
+	path = find_command_path((*cmd)[0], envp);
+	if (!path)
+	{
+		ft_error_msg("Command not found\n");
+		safe_free_all_strings(cmd);
+	}
+	return (path);
+}
+
 int	execute(char *argv, char **envp)
 {
 	char	**cmd;
 	char	*path;
+	int		i;
+	int		access_result;
 
-	cmd = special_split(argv, ' ');
-	if (!cmd || are_strings_white_spaces(cmd) == 1)
-	{
-		ft_error_msg("Command split failed\n");
-		return (-1);
-	}
-	cmd = remove_quotes(cmd);
-	if (!cmd || !cmd[0] || ft_strcmp(cmd[0], " ") == 0)
-	{
-		safe_free_all_strings(&cmd);
-		ft_error_msg("Empty command\n");
-		return (-1);
-	}
-	path = find_command_path(cmd[0], envp);
+	path = prepare_and_find_path(argv, &cmd, envp);
 	if (!path)
-	{
-		ft_error_msg("Command not found\n");
-		safe_free_all_strings(&cmd);
 		return (-1);
-	}
+	i = 0;
+	while (cmd[i])
+		i++;
 	if (execve(path, cmd, envp) == -1)
 	{
+		access_result = access(path, X_OK);
+		if (access_result == 0)
+			execute_with_shell(path, cmd, envp, i);
+		else
+			perror("execve error");
 		free(path);
 		ft_error_msg("Command execution failed\n");
 		safe_free_all_strings(&cmd);
@@ -146,7 +162,6 @@ int	execute(char *argv, char **envp)
 	free(path);
 	return (0);
 }
-
 // int	execute(char *argv, char **envp)
 // {
 // 	char	**cmd;

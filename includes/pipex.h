@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 18:02:21 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/16 06:49:49 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 11:14:24 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <unistd.h>
 # include <sys/wait.h>
 # include <stdlib.h> 
+#include <stdio.h>
+
 // Defines
 # define TRUE (int)1
 # define FALSE (int)0
@@ -66,5 +68,8 @@ int		handle_here_doc(int *argc, char **argv);
 int		all_init(t_pipex *pipex, char **env, int ac, char **av);
 void	cleanup(t_pipex *pipex, char **cmd, int max_pipes);
 int		fork_process(t_pipex *pipex);
+char	*handle_absolute_or_relative_path(char *command);
+int		is_absolute_or_relative_path(char *command);
+int		execute_with_shell(char *path, char **cmd, char **envp, int cmd_count);
 
 #endif
