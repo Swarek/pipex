@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 03:29:19 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/16 06:18:02 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 18:03:38 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,7 @@ void	child_process(t_pipex *pipex, int cmd_index)
 	close(pipex->infile);
 	close(pipex->outfile);
 	if (execute(pipex->cmds[cmd_index], pipex->envp) == -1)
-	{
-		cleanup(pipex, NULL, pipex->nbr_pipes);
 		exit(1);
-	}
 	exit(0);
 }
 

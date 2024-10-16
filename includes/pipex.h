@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 18:02:21 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/16 11:14:24 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 18:04:43 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	cleanup_child(t_pipex *pipex, char **cmd, int max_pipes);
 int		is_delimiter(char c, int quote, char delimiter);
 void	close_both(int to_close1, int to_close2);
 char	**remove_quotes(char **cmd);
-char	*cmd_name(char *cmd);
 char	*find_command_path(char *command, char **envp);
 int		handle_here_doc(int *argc, char **argv);
 int		all_init(t_pipex *pipex, char **env, int ac, char **av);

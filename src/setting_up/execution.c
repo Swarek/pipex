@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/16 11:16:17 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 18:04:41 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,27 +87,6 @@ int	are_strings_white_spaces(char **cmd)
 	return (1);
 }
 
-char	*cmd_name(char *cmd)
-{
-	int		i;
-	char	*name;
-
-	i = 0;
-	while (cmd[i] && cmd[i] != ' ')
-		i++;
-	name = malloc(sizeof(char) * (i + 1));
-	if (!name)
-		return (ft_error_msg("Memory allocation failed\n"), NULL);
-	i = 0;
-	while (cmd[i] && cmd[i] != ' ')
-	{
-		name[i] = cmd[i];
-		i++;
-	}
-	name[i] = '\0';
-	return (name);
-}
-
 char	*prepare_and_find_path(char *argv, char ***cmd, char **envp)
 {
 	char	*path;
@@ -162,6 +141,7 @@ int	execute(char *argv, char **envp)
 	free(path);
 	return (0);
 }
+
 // int	execute(char *argv, char **envp)
 // {
 // 	char	**cmd;

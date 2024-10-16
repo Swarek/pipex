@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:11:50 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/16 11:15:20 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 11:17:15 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ int	execute_with_shell(char *path, char **cmd, char **envp, int cmd_count)
 	free(new_cmd);
 	return (-1);
 }
-
 
 int	is_absolute_or_relative_path(char *command)
 {
