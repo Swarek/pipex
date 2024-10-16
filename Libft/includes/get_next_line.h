@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 06:59:56 by mblanc            #+#    #+#             */
-/*   Updated: 2024/09/04 14:31:37 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 06:56:26 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,8 @@ char	*ft_strchr(const char *str, int c);
 char	*ft_strdup(const char *s);
 char	*my_strjoin(char *s1, char *s2);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
+char	*process_data(char data[BUFFER_SIZE]);
+char	*data_with_nl(char data[BUFFER_SIZE], char *place_sn);
+char	*read_from_fd(int fd, char *buffer, int *bytes_read);
 
 #endif

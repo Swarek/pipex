@@ -6,19 +6,18 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 04:54:57 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/16 03:23:35 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 06:49:16 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-#include <stdio.h> // Pour perror
-
-void	handle_here_doc(int *argc, char **argv)
+int	handle_here_doc(int *argc, char **argv)
 {
 	int	i;
+	int	return_value;
 
-	here_doc_management(argv[2]);
+	return_value = here_doc_management(argv[2]);
 	argv[1] = "temp.txt";
 	i = 2;
 	while (argv[i + 1])
@@ -28,20 +27,29 @@ void	handle_here_doc(int *argc, char **argv)
 	}
 	argv[i] = NULL;
 	(*argc)--;
+	return (return_value);
 }
 
-void	here_doc_management(char *limiter)
+int	write_to_temp(int fd, char *line)
 {
-	size_t	len;
-	char	*line;
+	if (write(fd, line, ft_strlen(line)) == -1)
+		return (ft_error_msg("Problem writing to temp.txt"),
+			free(line), close(fd), -1);
+	if (write(fd, "\n", 1) == -1)
+		return (ft_error_msg("Problem writing newline to temp.txt"),
+			free(line), close(fd), -1);
+	return (0);
+}
+
+int	here_doc_management(char *limiter)
+{
 	int		fd;
+	char	*line;
+	size_t	len;
 
 	fd = open("temp.txt", O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd == -1)
-	{
-		perror("Error opening temp.txt");
-		exit(EXIT_FAILURE);
-	}
+		return (ft_error_msg("Problem opening temp.txt"));
 	while (1)
 	{
 		write(1, "> ", 2);
@@ -52,25 +60,12 @@ void	here_doc_management(char *limiter)
 		if (len > 0 && line[len - 1] == '\n')
 			line[len - 1] = '\0';
 		if (ft_strcmp(line, limiter) == 0 || len == 0)
-		{
-			free(line);
 			break ;
-		}
-		if (write(fd, line, ft_strlen(line)) == -1)
-		{
-			perror("Error writing to temp.txt");
-			free(line);
-			close(fd);
-			exit(EXIT_FAILURE);
-		}
-		if (write(fd, "\n", 1) == -1)
-		{
-			perror("Error writing newline to temp.txt");
-			free(line);
-			close(fd);
-			exit(EXIT_FAILURE);
-		}
+		if (write_to_temp(fd, line) == -1)
+			return (-1);
 		free(line);
 	}
+	free(line);
 	close(fd);
+	return (0);
 }

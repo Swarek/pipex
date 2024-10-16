@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 20:41:32 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/14 18:27:56 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 06:55:58 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,11 @@ char	*taking_the_buff(int fd, char data[BUFFER_SIZE], char *output)
 		buffer = ftt_calloc(BUFFER_SIZE + 1, sizeof(char));
 		if (!buffer)
 			return (free(output), NULL);
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read < 0)
+		if (!read_from_fd(fd, buffer, &bytes_read))
 		{
-			bytes_read = 0;
-			while (bytes_read < BUFFER_SIZE)
-				data[bytes_read++] = 0;
 			free(buffer);
 			return (free(output), NULL);
 		}
-		buffer[bytes_read] = '\0';
 		temp = output;
 		output = my_strjoin(output, buffer);
 		free(temp);
@@ -92,26 +87,10 @@ char	*data_with_nl(char data[BUFFER_SIZE], char *place_sn)
 char	*verif_data(char data[BUFFER_SIZE], int fd)
 {
 	char	*output;
-	char	*memo;
-	int		i;
 
-	output = NULL;
-	i = -1;
-	if (data[0] != 0)
-	{
-		memo = ft_strchr(data, '\n');
-		if (memo)
-			return (data_with_nl(data, memo));
-		output = ftt_calloc(BUFFER_SIZE + 1, sizeof(char));
-		if (!output)
-			return (NULL);
-		while (data[++i])
-			output[i] = data[i];
-		output[i] = '\0';
-		i = 0;
-		while (i < BUFFER_SIZE)
-			data[i++] = 0;
-	}
+	output = process_data(data);
+	if (output)
+		return (output);
 	if (data[0] == 0)
 	{
 		output = taking_the_buff(fd, data, output);

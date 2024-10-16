@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:43:10 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/14 18:25:56 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 06:53:03 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,4 +110,30 @@ char	*ft_strdup(const char *s)
 	}
 	dup[i] = '\0';
 	return (dup);
+}
+
+char	*process_data(char data[BUFFER_SIZE])
+{
+	char	*output;
+	char	*memo;
+	int		i;
+
+	output = NULL;
+	i = -1;
+	if (data[0] != 0)
+	{
+		memo = ft_strchr(data, '\n');
+		if (memo)
+			return (data_with_nl(data, memo));
+		output = ftt_calloc(BUFFER_SIZE + 1, sizeof(char));
+		if (!output)
+			return (NULL);
+		while (data[++i])
+			output[i] = data[i];
+		output[i] = '\0';
+		i = 0;
+		while (i < BUFFER_SIZE)
+			data[i++] = 0;
+	}
+	return (output);
 }

@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 02:51:42 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/16 06:29:07 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 06:43:21 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ int	main(int argc, char **argv, char **envp)
 	if (argc < 5 || envp == NULL)
 		return (ft_error_msg("Not enought arguments or envp problem\n"), -1);
 	if (ft_strcmp(argv[1], "here_doc") == 0 && argc > 5)
-		handle_here_doc(&argc, argv);
+		if (handle_here_doc(&argc, argv) == -1)
+			return (-1);
 	if (opening_files(&pipex, argv, argc) == -1)
 		return (-1);
 	if (all_init(&pipex, envp, argc, argv) == -1)

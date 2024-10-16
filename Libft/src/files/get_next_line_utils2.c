@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   get_next_line_utils2.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/06 00:34:23 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/16 06:57:14 by mblanc           ###   ########.fr       */
+/*   Created: 2024/10/16 06:56:10 by mblanc            #+#    #+#             */
+/*   Updated: 2024/10/16 06:56:19 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "get_next_line.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+char	*read_from_fd(int fd, char *buffer, int *bytes_read)
 {
-	t_pipex	pipex;
-
-	if (argc != 5 || envp == NULL)
+	*bytes_read = read(fd, buffer, BUFFER_SIZE);
+	if (*bytes_read < 0)
 	{
-		ft_error_msg("Usage: ./pipex infile \"cmd1\" \"cmd2\" outfile\n");
-		exit(EXIT_FAILURE);
+		*bytes_read = 0;
+		while (*bytes_read < BUFFER_SIZE)
+			buffer[(*bytes_read)++] = 0;
+		return (NULL);
 	}
-	if (opening_files(&pipex, argv, argc) == -1)
-		exit(EXIT_FAILURE);
-	pipex.envp = envp;
-	process_pipe(&pipex, argv[2], argv[3]);
-	close(pipex.infile);
-	close(pipex.outfile);
-	return (0);
+	buffer[*bytes_read] = '\0';
+	return (buffer);
 }
