@@ -14,7 +14,7 @@ BONUS_SOURCES := $(wildcard $(SRC_DIR)/bonus/*.c $(SRC_DIR)/setting_up/*.c)
 BONUS_OBJECTS = $(BONUS_SOURCES:$(SRC_DIR)/%.c=$(OBJ_BONUS_DIR)/%.o)
 BONUS_OBJECTS := $(BONUS_OBJECTS:main_bonus.c=$(OBJ_BONUS_DIR)/main_bonus.o)
 
-FLAGS = -I$(INC_DIR) -I$(LIBFT_DIR)/includes -Wall -Wextra -Werror
+FLAGS = -I$(INC_DIR) -I$(LIBFT_DIR)/includes -g -Wall -Wextra -Werror
 LINKS = -L$(LIBFT_DIR) -lft
 
 LIBFT_DIR = Libft

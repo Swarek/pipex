@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 00:34:23 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/14 00:08:51 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/15 18:32:45 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	pipex;
-
+	
 	if (argc != 5 || envp == NULL)
 	{
 		ft_error_msg("Usage: ./pipex infile \"cmd1\" \"cmd2\" outfile\n");

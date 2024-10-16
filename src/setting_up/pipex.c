@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 00:19:46 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/14 17:59:12 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 06:31:28 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,12 @@ void	process_pipe(t_pipex *pipex, char *cmd1, char *cmd2)
 int	opening_files(t_pipex *pipex, char **argv, int argc)
 {
 	pipex->infile = open(argv[1], O_RDONLY);
-	if (pipex->infile < 0)
-		return (ft_error_msg("Failed to open infile\n"));
 	pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (pipex->outfile < 0 && pipex->infile < 0)
+		return (ft_error_msg("Problem with infile and outfile\n"));
+	else if (pipex->infile < 0)
+		return (close(pipex->infile), ft_error_msg("Failed to open infile\n"));
 	if (pipex->outfile < 0)
-		return (ft_error_msg("Failed to open outfile\n"));
+		return (close(pipex->infile), ft_error_msg("Failed to open outfile\n"));
 	return (0);
 }

@@ -6,13 +6,29 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 04:54:57 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/14 18:37:24 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 03:23:35 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 #include <stdio.h> // Pour perror
+
+void	handle_here_doc(int *argc, char **argv)
+{
+	int	i;
+
+	here_doc_management(argv[2]);
+	argv[1] = "temp.txt";
+	i = 2;
+	while (argv[i + 1])
+	{
+		argv[i] = argv[i + 1];
+		i++;
+	}
+	argv[i] = NULL;
+	(*argc)--;
+}
 
 void	here_doc_management(char *limiter)
 {
@@ -58,4 +74,3 @@ void	here_doc_management(char *limiter)
 	}
 	close(fd);
 }
-

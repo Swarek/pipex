@@ -6,18 +6,18 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 04:35:57 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/12 21:37:56 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 05:47:48 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	cleanup_parent(t_pipex *pipex)
+void	cleanup(t_pipex *pipex, char **cmd, int max_pipes)
 {
 	int	i;
 
 	i = 0;
-	while (i < pipex->cmd_count - 1)
+	while (i < max_pipes)
 	{
 		if (pipex->pipes[i])
 		{
@@ -31,37 +31,12 @@ void	cleanup_parent(t_pipex *pipex)
 	pipex->pipes = NULL;
 	if (pipex->infile != -1)
 		close(pipex->infile);
-	if (pipex->outfile != -1)
-		close(pipex->outfile);
-	if (pipex->child_pids)
-		free(pipex->child_pids);
-}
-
-void	cleanup_child(t_pipex *pipex, char **cmd, int max_pipes)
-{
-	int	i;
-
-	i = -1;
-	while (++i < max_pipes)
-	{
-		if (pipex->pipes[i])
-		{
-			close(pipex->pipes[i][0]);
-			close(pipex->pipes[i][1]);
-			free(pipex->pipes[i]);
-		}
-	}
-	free(pipex->pipes);
-	pipex->pipes = NULL;
-	if (pipex->infile != -1)
-		close(pipex->infile);
-	if (pipex->outfile != -1)
-		close(pipex->outfile);
 	if (cmd)
 		safe_free_all_strings(&cmd);
+	if (pipex->outfile != -1)
+		close(pipex->outfile);
 	if (pipex->child_pids)
-	{
 		free(pipex->child_pids);
-		pipex->child_pids = NULL;
-	}
+	if (pipex->cmds)
+		free(pipex->cmds);
 }

@@ -4,8 +4,8 @@
         {
             "label": "build",  // Le nom de la tâche appelé par "preLaunchTask"
             "type": "shell",
-            "command": "make",
-            "args": ["debug"],  // Utilise la cible "debug" pour compiler avec les symboles de débogage
+            "command": "make bonus",
+            "args": [""],  // Utilise la cible "debug" pour compiler avec les symboles de débogage
             "group": {
                 "kind": "build",
                 "isDefault": true

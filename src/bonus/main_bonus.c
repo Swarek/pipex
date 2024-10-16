@@ -6,13 +6,13 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 02:51:42 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/14 17:26:01 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/16 06:29:07 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	wait_and_cleanup(t_pipex *pipex, pid_t *child_pids)
+void	wait_and_cleanup(t_pipex *pipex)
 {
 	int	i;
 	int	status;
@@ -22,14 +22,14 @@ void	wait_and_cleanup(t_pipex *pipex, pid_t *child_pids)
 	i = 0;
 	while (i < pipex->cmd_count)
 	{
-		if (waitpid(child_pids[i], &status, 0) == -1)
+		if (waitpid(pipex->child_pids[i], &status, 0) == -1)
 		{
 			ft_error_msg("Waitpid failed\n");
 			exit_code = 1;
 		}
 		i++;
 	}
-	cleanup_parent(pipex);
+	cleanup(pipex, NULL, pipex->nbr_pipes);
 	if (pipex->infile != -1)
 		close(pipex->infile);
 	if (pipex->outfile != -1)
@@ -37,57 +37,20 @@ void	wait_and_cleanup(t_pipex *pipex, pid_t *child_pids)
 	exit(exit_code);
 }
 
-void	handle_here_doc(int *argc, char **argv)
-{
-	int	i;
-
-	here_doc_management(argv[2]);
-	argv[1] = "temp.txt";
-	i = 2;
-	while (argv[i + 1])
-	{
-		argv[i] = argv[i + 1];
-		i++;
-	}
-	argv[i] = NULL;
-	(*argc)--;
-}
-
-void	initialize_pipex(t_pipex *pipex, char **envp)
-{
-	pipex->infile = -1;
-	pipex->outfile = -1;
-	pipex->pipes = NULL;
-	pipex->cmd_count = 0;
-	pipex->child_pids = NULL;
-	pipex->envp = envp;
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	pipex;
-	pid_t	*child_pids;
-	int		here_doc;
 
-	here_doc = 0;
-	child_pids = NULL;
-	initialize_pipex(&pipex, envp);
 	if (argc < 5 || envp == NULL)
-		return (ft_error_msg
-			("Usage: ./pipex infile \"cmd1\" \"cmd2\"... \"cmdn\" outfile\n"));
+		return (ft_error_msg("Not enought arguments or envp problem\n"), -1);
 	if (ft_strcmp(argv[1], "here_doc") == 0 && argc > 5)
 		handle_here_doc(&argc, argv);
 	if (opening_files(&pipex, argv, argc) == -1)
-		return (cleanup_parent(&pipex), -1);
-	pipex.cmd_count = argc - 3;
-	if (init_pipes_fork_process(&pipex, argv, &child_pids) == -1)
-	{
-		cleanup_parent(&pipex);
-		exit(EXIT_FAILURE);
-	}
-	wait_and_cleanup(&pipex, child_pids);
-	close(pipex.infile);
-	close(pipex.outfile);
+		return (-1);
+	if (all_init(&pipex, envp, argc, argv) == -1)
+		return (-1);
+	fork_process(&pipex);
+	wait_and_cleanup(&pipex);
 	return (0);
 }
 
