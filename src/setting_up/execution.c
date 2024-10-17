@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:55:26 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/16 18:12:42 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/17 12:40:00 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,26 +118,19 @@ int	execute(char *argv, char **envp)
 	char	**cmd;
 	char	*path;
 	int		i;
-	int		access_result;
 
 	path = prepare_and_find_path(argv, &cmd, envp);
 	if (!path)
-		return (-1);
+		return (127);
 	i = 0;
 	while (cmd[i])
 		i++;
 	if (execve(path, cmd, envp) == -1)
 	{
-		access_result = access(path, X_OK);
-		if (access_result == 0)
-			execute_with_shell(path, cmd, envp, i);
-		else
-			perror("execve error");
-		free(path);
-		ft_error_msg("Command execution failed\n");
-		safe_free_all_strings(&cmd);
-		return (-1);
+		if (execute_with_shell(path, cmd, envp, i) == -1)
+			return (free(path), safe_free_all_strings(&cmd), 126);
 	}
+	safe_free_all_strings(&cmd);
 	free(path);
 	return (0);
 }

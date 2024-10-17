@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 18:02:21 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/16 18:15:36 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/17 12:05:01 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ typedef struct s_pipex
 
 // Leaks, closes and errors
 void	wait_and_cleanup(t_pipex *pipex);
-void	close_both(int to_close1, int to_close2);
+int		close_both(int to_close1, int to_close2);
 void	cleanup(t_pipex *pipex, char **cmd, int max_pipes);
 
 // Here_doc

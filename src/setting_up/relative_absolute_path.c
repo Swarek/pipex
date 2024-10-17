@@ -6,7 +6,7 @@
 /*   By: mblanc <mblanc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:11:50 by mblanc            #+#    #+#             */
-/*   Updated: 2024/10/16 18:13:02 by mblanc           ###   ########.fr       */
+/*   Updated: 2024/10/17 12:29:11 by mblanc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,21 @@ int	execute_with_shell(char *path, char **cmd, char **envp, int cmd_count)
 	new_cmd = build_new_cmd(path, cmd, cmd_count);
 	if (!new_cmd)
 	{
-		perror("malloc error");
+		ft_error_msg("Malloc error\n");
 		return (-1);
 	}
-	execve("/bin/sh", new_cmd, envp);
-	perror("execve error");
-	j = 0;
-	while (new_cmd[j])
+	if (execve("/bin/sh", new_cmd, envp) == -1)
 	{
-		free(new_cmd[j]);
-		j++;
+		j = 0;
+		while (new_cmd[j])
+		{
+			free(new_cmd[j]);
+			j++;
+		}
+		free(new_cmd);
+		return (ft_error_msg("Command execution failed\n"));
 	}
-	free(new_cmd);
-	return (-1);
+	return (0);
 }
 
 int	is_absolute_or_relative_path(char *command)
@@ -66,6 +68,13 @@ int	is_absolute_or_relative_path(char *command)
 char	*handle_absolute_or_relative_path(char *command)
 {
 	if (access(command, X_OK) == 0)
-		return (ft_strdup(command));
+		return (command);
 	return (NULL);
 }
+
+// char	*handle_absolute_or_relative_path(char *command)
+// {
+// 	if (access(command, X_OK) == 0)
+// 		return (ft_strdup(command));
+// 	return (NULL);
+// }
